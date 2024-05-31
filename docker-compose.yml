@@ -1,0 +1,73 @@
+services:
+  laravel_jamworks_php-fpm:
+    container_name: laravel_jamworks_php-fpm
+    build:
+      context: ./
+      dockerfile: ./_docker/php-fpm/Dockerfile
+      args:
+        - PUID=${PUID}
+        - PGID=${PGID}
+    volumes:
+      - ./:/var/www/
+    networks:
+      - shared
+
+  laravel_jamworks_php-cli:
+    container_name: laravel_jamworks_php-cli
+    build:
+      context:  ./
+      dockerfile: ./_docker/php-cli/Dockerfile
+    restart: on-failure
+    volumes:
+      - ./:/var/www/
+    networks:
+      - shared
+
+  laravel_jamworks_nginx:
+    container_name: laravel_jamworks_nginx
+    build:
+      context: ./
+      dockerfile: ./_docker/nginx/Dockerfile
+    ports:
+      - ${NGINX_HOST_HTTP_PORT}:${NGINX_HOST_HTTP_PORT}
+    volumes:
+      - ./:/var/www:rw
+    depends_on:
+      - laravel_jamworks_php-fpm
+    networks:
+      - shared
+
+  laravel_jamworks_postgres:
+    container_name: laravel_jamworks_postgres
+    build:
+      context: ./
+      dockerfile: ./_docker/postgres/Dockerfile
+    ports:
+      - ${POSTGRES_EXTERNAL_PORT}:${POSTGRES_PORT}
+    environment:
+      POSTGRES_DB: ${POSTGRES_DB}
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+    volumes:
+      - laravel_jamworks_postgres:/var/lib/postgresql/data:rw
+    networks:
+      - shared
+
+  laravel_jamworks_mailer:
+      container_name: laravel_jamworks_mailer
+      image: schickling/mailcatcher
+      ports:
+          - "1080:1080" # web
+          - "1025:1025" # smtp
+      restart: unless-stopped
+      networks:
+          - shared
+
+
+volumes:
+  laravel_jamworks_postgres:
+    external: false
+
+networks:
+  shared:
+    external: false
