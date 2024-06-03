@@ -1,6 +1,6 @@
 # Installation
 1. Ensure that the following are installed on your system: Docker, Docker Compose, Make, Git.
-2. Run: git clone https://github.com/nrnwest/laravel_jamworks.git.
+2. Run: git clone https://github.com/nrnwest/laravel_jamworks.git
 3. cd laravel_jamworks.
 4. Initialize the project by running: make init.
 5. Run PHPUnit tests with: make test.
