@@ -2,6 +2,9 @@
 
 return [
 
+    'orders' => env('QUEUES_ORDERS', 'default'),
+    'emails' => env('QUEUES_ORDERS_EMAILS', 'default'),
+
     /*
     |--------------------------------------------------------------------------
     | Default Queue Connection Name

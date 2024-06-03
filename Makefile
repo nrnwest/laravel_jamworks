@@ -34,15 +34,11 @@ db_migrate_fresh:
 init:
 	make build up composer_install db_migrate_fresh wprint
 
-# install new project
-install:
-	make build up wprint
-
 test:
 	${DOCKER_COMPOSE} run --rm -it -u www ${PHP_CLI} php artisan test
 
-swagger:
-	${DOCKER_COMPOSE} run -it -u www ${PHP_CLI} php artisan l5-swagger:generate
+queue:
+	${DOCKER_COMPOSE} run --rm -it -u www ${PHP_CLI} php artisan queue:work --queue=order_process,order_emails
 
 wprint:
 	@echo ${WELCOME}
