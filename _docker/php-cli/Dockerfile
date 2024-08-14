@@ -2,6 +2,10 @@ FROM php:8.2-cli
 
 WORKDIR /var/www
 
+# по умолчанию PUID и PGID
+ARG PUID=1000
+ARG PGID=1000
+
 RUN apt-get update -y && \
     apt-get upgrade -y && \
     apt-get install -y \
@@ -31,8 +35,8 @@ RUN pecl install -o -f redis \
     &&  rm -rf /tmp/pear \
     &&  docker-php-ext-enable redis
 
-RUN groupadd -g 1000 www
-RUN useradd -u 1000 -ms /bin/bash -g www www
+RUN groupadd -g $PGID www
+RUN useradd -u $PUID -ms /bin/bash -g www www
 
 # Copy existing application directory permissions
 COPY --chown=www:www . /var/www

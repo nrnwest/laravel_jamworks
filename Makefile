@@ -23,7 +23,7 @@ php_cli:
 	${DOCKER_COMPOSE} run -it -u www ${PHP_CLI} bash
 
 composer_install:
-	${DOCKER_COMPOSE} run -it -u www ${PHP_CLI} composer install --optimize-autoloader
+	${DOCKER_COMPOSE} run -it ${PHP_CLI} composer install --optimize-autoloader
 
 db_seed:
 	${DOCKER_COMPOSE} run -it -u www ${PHP_CLI} php artisan db:seed
